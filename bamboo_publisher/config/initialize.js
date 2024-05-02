@@ -1,12 +1,18 @@
 const { MongoClient } = require('mongodb');
-
+require('dotenv').config();
 
 class Initializer {
-    constructor() { }
+    constructor() {
+        this.mongo
+     }
     run = async () => {
-        const mongoDB = await this.mongoDB()
+        const mongoDB = await this.mongoDB();
+        this.mongo=mongoDB
         return { mongoDB }
 
+    }
+    get mon() {
+        return this.mongo;
     }
     mongoDB = async () => {
         const url = process.env.MONGODB_URL;

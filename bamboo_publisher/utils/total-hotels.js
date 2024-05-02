@@ -5,14 +5,17 @@ const { refresherApiKey } = require('./refresher-api-key');
 
 const getTotalHotelsByRequest = async () => {
   try {
-    const ApiKey = refresherApiKey()
+    const { token, secret } = await refresherApiKey()
+    if (!token) {
+      return { data: null, error: 'API KEY is invalid', from, to }
+    }
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
       url: `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1`,
       headers: {
-        'Api-key': ApiKey,
-        'X-Signature': generateHash(ApiKey, process.env.API_SECRET),
+        'Api-key': token,
+        'X-Signature': generateHash(token, secret),
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip'
       },
@@ -30,6 +33,6 @@ const getTotalHotelsByRequest = async () => {
 
 }
 
-module.exports={
+module.exports = {
   getTotalHotelsByRequest
 }
