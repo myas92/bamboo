@@ -3,13 +3,13 @@ const axios = require('axios');
 const { generateHash } = require('./generate-hash');
 const { refresherApiKey } = require('./refresher-api-key');
 
-const getHotelsContentByRequest = async ({from, to}) => {
+const getTotalHotelsByRequest = async () => {
   try {
     const ApiKey = refresherApiKey()
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=${from}&to=${to}`,
+      url: `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1`,
       headers: {
         'Api-key': ApiKey,
         'X-Signature': generateHash(ApiKey, process.env.API_SECRET),
@@ -20,18 +20,16 @@ const getHotelsContentByRequest = async ({from, to}) => {
     };
 
     const { data } = await axios.request(config);
-    return { data, from, to, error: null }
+    return { total: data.total, error: null }
   } catch (error) {
     return {
-      data: null,
-      error,
-      from,
-      to
+      total: null,
+      error
     }
   }
 
 }
 
 module.exports={
-  getHotelsContentByRequest
+  getTotalHotelsByRequest
 }
