@@ -11,33 +11,16 @@ class HotelListener extends Listener {
             const { hotels } = data
 
 
-            const operations = dataToInsert.map(item => ({
-                insertOne: { document: item }
+            const updateManyOperation = hotels.map(hotel => ({
+                updateOne: {
+                    filter: { code: hotel.code }, 
+                    update: { $set: {...hotel } }, 
+                    upsert: true 
+                }
             }));
             
-            db.collection.bulkWrite(operations, { ordered: false })
-                .then(result => {
-                    console.log("Data inserted successfully:", result);
-                })
-                .catch(error => {
-                    console.error("Error inserting data:", error);
-                });
-
-
-
-
-            await mongoDB.collection("hotels").updateOne({
-                code : item.code,
-            },{
-                $set: {
-                    ...item
-                }
-            }, {
-                upsert: true
-            });
-
-
-            const result = await mongoDB.collection("hotels").insertMany(hotels);
+            let updateManyResult = await mongoDB.collection("hotels").bulkWrite(updateManyOperation, { ordered: false })
+            // const result = await mongoDB.collection("hotels").insertMany(hotels);
             channel.ack(msg)
         } catch (error) {
             console.log("hotelListener", error)
