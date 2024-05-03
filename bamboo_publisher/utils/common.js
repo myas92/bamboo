@@ -5,7 +5,7 @@ function chunkArray(arr, chunkSize) {
         let hotels = arr.hotels.slice(i, i + chunkSize)
         chunkedArrays.push({
             auditData: arr.auditData,
-            from: i,
+            from: i+1,
             hotels: hotels,
             to: i + hotels.length
         });

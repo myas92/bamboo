@@ -39,7 +39,7 @@ async function checkStatusService() {
 async function getHotelsInfoService(total) {
     const range = generateRange(total, LIMIT_RANGE_REQUEST)
     for (let currentRange of range) {
-        console.log(currentRange)
+        console.log('started:', currentRange)
         const { data, error, isValid } = await getHotelsContentByRequest(currentRange)
         if (error) {
             if (error?.response?.status == 403) {

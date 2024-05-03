@@ -19,8 +19,9 @@ class HotelListener extends Listener {
                 }
             }));
             
-            let updateManyResult = await mongoDB.collection("hotels2").bulkWrite(updateManyOperation, { ordered: false })
+            await mongoDB.collection("hotels2").bulkWrite(updateManyOperation, { ordered: false })
             // const result = await mongoDB.collection("hotels").insertMany(hotels);
+            console.log(`Inserted ${data.from} - ${data.to} `)
             channel.ack(msg)
         } catch (error) {
             console.log("hotelListener", error)
