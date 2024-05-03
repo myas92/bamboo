@@ -19,7 +19,7 @@ class HotelListener extends Listener {
                 }
             }));
             
-            let updateManyResult = await mongoDB.collection("hotels").bulkWrite(updateManyOperation, { ordered: false })
+            let updateManyResult = await mongoDB.collection("hotels2").bulkWrite(updateManyOperation, { ordered: false })
             // const result = await mongoDB.collection("hotels").insertMany(hotels);
             channel.ack(msg)
         } catch (error) {

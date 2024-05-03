@@ -5,6 +5,7 @@ function generateHash(apiKey, secret) {
     const data = apiKey + secret + currentTimestamp;
 
     const hash = crypto.createHash('sha256').update(data).digest('hex');
+    // console.log(hash)
     return hash;
 }
 

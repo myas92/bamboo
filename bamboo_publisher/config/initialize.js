@@ -17,8 +17,6 @@ class Initializer {
     mongoDB = async () => {
         const url = process.env.MONGODB_URL;
         const option = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
         };
         const client = new MongoClient(url, option);
         await client.connect();

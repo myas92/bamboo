@@ -4,9 +4,11 @@ const bodyParser = require("body-parser");
 const app = express()
 const Initializer = require('./config/initialize')
 const crawlRouter = require("./domains/crawl/crawl.router")
+const tokenRouter = require("./domains/token/token.router")
 app.use(bodyParser.json());
 
 app.use('/v1/crawl/', crawlRouter)
+app.use('/v1/tokens/', tokenRouter)
 
 
 app.use((error, req, res, next) => {

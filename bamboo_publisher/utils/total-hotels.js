@@ -2,12 +2,13 @@ require('dotenv').config()
 const axios = require('axios');
 const { generateHash } = require('./generate-hash');
 const { refresherApiKey } = require('./refresher-api-key');
+const { validateResponse } = require('./validate');
 
 const getTotalHotelsByRequest = async () => {
   try {
     const { token, secret } = await refresherApiKey()
     if (!token) {
-      return { data: null, error: 'API KEY is invalid', from, to }
+      return { data: null, error: 'Does not exist any valid API KEY'}
     }
     let config = {
       method: 'get',
@@ -22,12 +23,28 @@ const getTotalHotelsByRequest = async () => {
       timeout: process.env.API_TEIMEOUT
     };
 
-    const { data } = await axios.request(config);
-    return { total: data.total, error: null }
+    const response = await axios.request(config);
+    if (!validateResponse(response)) {
+      throw new Error('Response Request is invalid')
+    }
+    return {
+      total: response.data.total, 
+      responseHeader: {
+        totalRequest: +response.headers['x-ratelimit-limit'],
+        remainder: +response.headers['x-ratelimit-remaining'],
+      },
+       isValid: true,
+       error: null
+    }
+
+
   } catch (error) {
+    console.error(error.message)
     return {
       total: null,
-      error
+      error,
+      isValid: false,
+      responseHeader: {}
     }
   }
 
