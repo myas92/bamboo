@@ -9,8 +9,6 @@ class HotelListener extends Listener {
         const mongoDB = Initializer.mon
         try {
             const { hotels } = data
-
-
             const updateManyOperation = hotels.map(hotel => ({
                 updateOne: {
                     filter: { code: hotel.code }, 

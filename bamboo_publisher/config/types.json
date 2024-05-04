@@ -1,0 +1,71 @@
+[
+    {
+        "url": "/hotel-content-api/1.0/types/ratecomments?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "rateComments",
+        "skip": 0
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/accommodations?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "accommodations"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/issues?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "issues"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/boards?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "boards"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/categories?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "categories"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/chains?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "chains"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/currencies?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "currencies"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/facilities?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "facilities"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/facilitygroups?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "facilityGroups"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/facilitytypologies?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "facilityTypologies"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/languages?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "languages"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/promotions?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "promotions"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/rooms?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "rooms"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/segments?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "segments"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/terminals?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "terminals"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/imagetypes?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "imageTypes"
+    },
+    {
+        "url": "/hotel-content-api/1.0/types/groupcategories?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "groupCategories"
+    }
+]

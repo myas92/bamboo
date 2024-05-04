@@ -1,5 +1,5 @@
 const { CHUNK_SIZE_TO_PUBLISH } = require('../config/static-variables')
-const rabbitWrapper = require('../rabbit-wrapper')
+const rabbitWrapper = require('../config/rabbit-wrapper')
 const { chunkArray } = require('../utils/common')
 async function publisher({ channel, queue, data }) {
   channel.sendToQueue(
@@ -30,8 +30,27 @@ async function publishHotelInfo(data) {
 
 }
 
+async function publishDailyHotelInfo(data) {
+  try {
+    let chunkedHotels = chunkArray(data,CHUNK_SIZE_TO_PUBLISH)
+    for (const hotels of chunkedHotels) {
+      publisher({
+        data: hotels,
+        channel: rabbitWrapper.channel,
+        queue: rabbitWrapper.dailyHotelQueue
+      })
+    }
+
+  } catch (error) {
+    console.log("----------------publish daily Hotel Info error:", error)
+  }
+
+}
+
+
 
 module.exports = {
   publisher,
   publishHotelInfo,
+  publishDailyHotelInfo
 }

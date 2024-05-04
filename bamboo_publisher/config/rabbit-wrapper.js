@@ -3,6 +3,7 @@ const { config } = require('dotenv')
 config()
 const QUEUE = {
     hotel: 'hotel_queue',
+    dailyHotel: 'daily_hotel_queue'
 }
 class RabbitWrapper {
     _client
@@ -22,6 +23,9 @@ class RabbitWrapper {
     }
     get hotelQueue() {
         return QUEUE.hotel;
+    }
+    get dailyHotelQueue() {
+        return QUEUE.dailyHotel;
     }
 
     async insertQueues() {

@@ -3,6 +3,10 @@ const Initializer = require('../config/initialize')
 
 async function refresherApiKey(maxUsageApiKey = MAX_USAGE_API_KEY) {
     try {
+        if (process.env.API_KEY && process.env.API_SECRET_KEY) {
+            return { token: process.env.API_KEY, secret: process.env.API_SECRET_KEY, error: null }
+        }
+        
         const mongoDB = Initializer.mon
         const { token, secret } = await mongoDB.collection("tokens").findOneAndUpdate(
             { usage: { $lt: maxUsageApiKey } },
@@ -38,9 +42,8 @@ async function getTotalRemainderUsageApiKey() {
     }
 }
 
-async function updateExpiredToken(){
-    
-}
+
+
 
 module.exports = {
     refresherApiKey,

@@ -1,24 +1,32 @@
 require('dotenv').config()
 const axios = require('axios');
-const { generateHash } = require('./generate-hash');
-const { refresherApiKey } = require('./refresher-api-key');
-const { validateResponse } = require('./validate');
+const { generateHash } = require('../utils/generate-hash');
+const { refresherApiKey } = require('../utils/refresher-api-key');
+const { validateResponse } = require('../utils/validate');
 
-const getTotalHotelsByRequest = async () => {
+const getDailyHotelsContentByRequest = async ({ from, to, lastUpdateTime }) => {
   try {
     const { token, secret } = await refresherApiKey()
     if (!token) {
-      return { data: null, error: 'Does not exist any valid API KEY'}
+      return { data: null, error: 'API KEY is invalid' }
     }
-    let config = {
+    const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1`,
+      url: process.env.API_URL_HOTELS_INFO,
       headers: {
         'Api-key': token,
         'X-Signature': generateHash(token, secret),
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip'
+      },
+      params: {
+        from: from,
+        to: to,
+        language: 'ENG',
+        fields: 'all',
+        lastUpdateTime: lastUpdateTime,
+        useSecondaryLanguage:false
       },
       timeout: process.env.API_TEIMEOUT
     };
@@ -28,28 +36,25 @@ const getTotalHotelsByRequest = async () => {
       throw new Error('Response Request is invalid')
     }
     return {
-      total: response.data.total, 
+      data: response.data,
+      total: response.data.total,
       responseHeader: {
         totalRequest: +response.headers['x-ratelimit-limit'],
         remainder: +response.headers['x-ratelimit-remaining'],
       },
-       isValid: true,
-       error: null
+      isValid: true,
+      error: null
     }
-
 
   } catch (error) {
     console.error(error.message)
     return {
-      total: null,
-      error,
-      isValid: false,
-      responseHeader: {}
+      data: null, total: 0, error, isValid: false
     }
   }
 
 }
 
 module.exports = {
-  getTotalHotelsByRequest
+  getDailyHotelsContentByRequest
 }

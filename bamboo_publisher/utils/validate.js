@@ -46,6 +46,7 @@ function validateResponse(response) {
 }
 
 
+
 module.exports = {
     validateResponseStatusCode,
     validateHotelsData,
