@@ -1,5 +1,9 @@
 [
     {
+        "url": "/hotel-content-api/1.0/types/facilities?fields=all&language=ENG&useSecondaryLanguage=True",
+        "type": "facilities"
+    },
+    {
         "url": "/hotel-content-api/1.0/types/ratecomments?fields=all&language=ENG&useSecondaryLanguage=True",
         "type": "rateComments",
         "skip": 0

@@ -2,3 +2,6 @@ node_modules
 .vscode
 package-lock.json
 .env
+hotel-info.json
+hotel.details.json
+test.js

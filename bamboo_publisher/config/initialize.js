@@ -21,12 +21,12 @@ class Initializer {
         const client = new MongoClient(url, option);
         await client.connect();
         const db = client.db();
-        const hotelsCollection = await db.collection('hotels3');
-        const roomsCollection = await db.collection('rooms');
-        const rateCommentsCollection = db.collection('rateComments');
-        await hotelsCollection.createIndex({ code: 1 }, { unique: true })
-        await roomsCollection.createIndex({ code: 1 }, { unique: true })
-        await rateCommentsCollection.createIndex({ code: 1 }, { unique: true })
+        // const hotelsCollection = await db.collection('hotels3');
+        // const roomsCollection = await db.collection('rooms');
+        // const rateCommentsCollection = db.collection('rateComments');
+        // await hotelsCollection.createIndex({ code: 1 }, { unique: true })
+        // await roomsCollection.createIndex({ code: 1 }, { unique: true })
+        // await rateCommentsCollection.createIndex({ code: 1 }, { unique: true })
         console.log("Connected to mongoDB")
         return db;
     }

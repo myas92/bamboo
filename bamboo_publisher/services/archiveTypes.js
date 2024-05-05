@@ -28,7 +28,7 @@ async function getTypesHotelsInfoService(from = 1, to = LIMIT_RANGE_REQUEST) {
 async function sendRequest({ url, type, from, to }) {
     const { total, data, error, isValid } = await getHotelsContentTypesByRequest({ url, type, from, to })
     if (error) {
-        if (error?.response?.status == 403) {
+        if (error == 'API KEY is incorrect' || error?.response?.status == 403) {
             console.log('Error:', type)
             throw new Error('API KEY is incorrect')
         }
@@ -53,16 +53,29 @@ async function runnerContentType() {
 
 async function storingHotelsContentTypes(data, type) {
     try {
-        const mongoDB = Initializer.mon
-        const updateManyOperation = data.map(item => ({
-            updateOne: {
-                filter: { code: item.code },
-                update: { $set: { ...item } },
-                upsert: true
-            }
-        }));
+        const mongoDB = Initializer.mon;
+        let updateManyOperation;
+        if(type=='facilities'){
+             updateManyOperation = data.map(item => ({
+                updateOne: {
+                    filter: { code: item.code,  facilityGroupCode: item.facilityGroupCode, },
+                    update: { $set: { ...item } },
+                    upsert: true
+                }
+            }));
+        }else{
+             updateManyOperation = data.map(item => ({
+                updateOne: {
+                    filter: { code: item.code },
+                    update: { $set: { ...item } },
+                    upsert: true
+                }
+            }));
+        }
+
 
         await mongoDB.collection(type).bulkWrite(updateManyOperation, { ordered: false })
+        console.log('Storing finished')
     } catch (error) {
         console.log(`Error in stroring data of ${type}`)
 
