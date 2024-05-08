@@ -1,6 +1,6 @@
-const { CHUNK_SIZE_TO_PUBLISH } = require('../config/static-variables')
-const rabbitWrapper = require('../config/rabbit-wrapper')
-const { chunkArray } = require('../utils/common')
+const { CHUNK_SIZE_TO_PUBLISH } = require('../../config/static-variables')
+const rabbitWrapper = require('../../config/rabbit-wrapper')
+const { chunkArray } = require('../../utils/common')
 async function publisher({ channel, queue, data }) {
   channel.sendToQueue(
     queue,

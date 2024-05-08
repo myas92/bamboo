@@ -1,5 +1,5 @@
 const Listener = require("./listener");
-const Initializer = require('../config/initialize')
+const Initializer = require('../../config/initialize')
 class HotelListener extends Listener {
     constructor(channel, queue) {
         super(channel, queue);
@@ -17,9 +17,9 @@ class HotelListener extends Listener {
                 }
             }));
             
-            await mongoDB.collection("hotels2").bulkWrite(updateManyOperation, { ordered: false })
+            let result = await mongoDB.collection("hotels").bulkWrite(updateManyOperation, { ordered: false })
             // const result = await mongoDB.collection("hotels").insertMany(hotels);
-            console.log(`Inserted ${data.from} - ${data.to} `)
+            console.log(`Inserted ${data.from} - ${data.to} | modified count: ${result?.modifiedCount} `)
             channel.ack(msg)
         } catch (error) {
             console.log("hotelListener", error)

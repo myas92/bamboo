@@ -40,6 +40,7 @@ class RabbitWrapper {
             this._client = await amqp.connect(amqpServer);
             this._channel = await this._client.createChannel();
             await this.insertQueues()
+            this._channel.prefetch(1); // تعدا پیام هایی که باید بگیرد
             console.log('connected to rabbitmq')
         } catch (error) {
             throw new Error(error)

@@ -3,7 +3,7 @@ const Initializer = require('../config/initialize')
 const moment = require('moment-timezone');
 const { generateRange } = require('../utils/generate-range');
 const { getHotelsContentByRequest } = require("../requests/hotels-content-request")
-const { publishHotelInfo } = require("../events/publisher");
+const { publishHotelInfo } = require("../events/publish/publisher");
 const { LIMIT_RANGE_REQUEST } = require('../config/static-variables');
 const { getDailyHotelsContentByRequest } = require('../requests/hotels-daily-content-request');
 

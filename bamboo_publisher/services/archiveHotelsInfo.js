@@ -2,7 +2,7 @@ const rabbitWrapper = require('../config/rabbit-wrapper')
 const Initializer = require('../config/initialize')
 const { generateRange } = require('../utils/generate-range');
 const { getHotelsContentByRequest } = require("../requests/hotels-content-request")
-const { publishHotelInfo } = require("../events/publisher");
+const { publishHotelInfo } = require("../events/publish/publisher");
 const { LIMIT_RANGE_REQUEST } = require('../config/static-variables');
 const { getTotalRemainderUsageApiKey } = require('../utils/refresher-api-key');
 

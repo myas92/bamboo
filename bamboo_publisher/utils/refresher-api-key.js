@@ -21,6 +21,9 @@ async function refresherApiKey(maxUsageApiKey = MAX_USAGE_API_KEY) {
 
 async function getTotalRemainderUsageApiKey() {
     try {
+        if (process.env.API_KEY && process.env.API_SECRET_KEY) {
+            return 1000000
+        }
         const mongoDB = Initializer.mon
         const result = await mongoDB.collection("tokens").aggregate([
             {

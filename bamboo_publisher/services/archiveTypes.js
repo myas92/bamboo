@@ -7,14 +7,16 @@ const { getHotelsContentTypesByRequest } = require('../requests/hotels-content-t
 async function getTypesHotelsInfoService(from = 1, to = LIMIT_RANGE_REQUEST) {
     try {
         for (let typeContent of typesContentInfo) {
-            console.log('started:', typeContent);
-            const { total } = await sendRequest({ ...typeContent, from, to })
-            if(total> to){
-                let skip = typeContent.skip ? typeContent.skip : 1
-                const range = generateRange(total, LIMIT_RANGE_REQUEST, skip )
-                for (let currentRange of range) {
-                    console.log(`Range for ${typeContent.type}: ${currentRange.from} - ${currentRange.to}`)
-                    await sendRequest({ ...typeContent, ...currentRange })
+            if(typeContent.isScrap==true){
+                console.log('started:', typeContent);
+                const { total } = await sendRequest({ ...typeContent, from, to })
+                if(total> to){
+                    let skip = typeContent.skip ? typeContent.skip : 1
+                    const range = generateRange(total, LIMIT_RANGE_REQUEST, skip )
+                    for (let currentRange of range) {
+                        console.log(`Range for ${typeContent.type}: ${currentRange.from} - ${currentRange.to}`)
+                        await sendRequest({ ...typeContent, ...currentRange })
+                    }
                 }
             }
         }
