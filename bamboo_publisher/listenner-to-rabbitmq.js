@@ -8,7 +8,7 @@ const { HotelListener } = require('./events/subscribe/hotel-listener')
 async function runner() {
   try {
     await Initializer.run()
-    await rabbitWrapper.connect(process.env.RABBITMQ_HOST, process.env.RABBITMQ_PORT);
+    await rabbitWrapper.connect(process.env.RABBITMQ_URL);
     new HotelListener(rabbitWrapper.channel, rabbitWrapper.hotelQueue).listen()
     console.log("Running server on port", process.env.PORT || 3000)
   } catch (err) {

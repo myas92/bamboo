@@ -57,7 +57,7 @@ async function getHotelsInfoService(total, skip = 0) {
 
 async function runnerArhcive() {
     try {
-        await rabbitWrapper.connect(process.env.RABBITMQ_HOST, process.env.RABBITMQ_PORT);
+        await rabbitWrapper.connect(process.env.RABBITMQ_URL);
         await Initializer.run()
         let { crawlingServiceStatus, total, isValid } = await checkStatusService()
         if (crawlingServiceStatus) {

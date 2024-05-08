@@ -34,9 +34,9 @@ class RabbitWrapper {
         }
     }
 
-    async connect(host, port) {
+    async connect(url) {
         try {
-            const amqpServer = `amqp://${host}:${port}` || 'amqp://localhost:5673';
+            const amqpServer = `${url}` || 'amqp://localhost:5673';
             this._client = await amqp.connect(amqpServer);
             this._channel = await this._client.createChannel();
             await this.insertQueues()
