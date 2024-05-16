@@ -11,35 +11,43 @@ async function runner() {
     }
     for (let { code } of codes) {
         if (code > 0) {
-            let foundedHotel = await mongoDB.collection('hotels').findOne({ code });
-            if (foundedHotel) {
-                try {
-                    let joinedHotelBoards = await joinBoards(foundedHotel)
-                    let joinedHotelAccommodationType = await joinAccommodationType(joinedHotelBoards)
-                    let joinedHotelCategory = await joinCategory(joinedHotelAccommodationType)
-                    let joinedHotelCategoryGroup = await joinCategoryGroup(joinedHotelCategory)
-                    let joinedHotelChain = await joinChain(joinedHotelCategoryGroup)
-                    let joinedHotelCountry = await joinCountry(joinedHotelChain)
-                    let joinedHotelDestination = await joinDestination(joinedHotelCountry)
-                    let joinedHotelFacilities = await joinfacilities(joinedHotelDestination)
-                    let joinedHotelImages = await joinImages(joinedHotelFacilities)
-                    let joinedHotelRooms = await joinRooms(joinedHotelImages)
-                    let joinedHotelSegments = await joinSegments(joinedHotelRooms)
-                    let joinedHotelTerminals = await joinTerminals(joinedHotelSegments)
-                    delete joinedHotelTerminals._id
-                    await mongoDB.collection("details").insertOne(joinedHotelTerminals);
-
-                    // let json = JSON.stringify(joinedHotelTerminals);
-                    fs.appendFileSync('myjsonfile.txt', `${code.toString()}\n`, 'utf8');
-                } catch (error) {
-                    console.log(error.message)
+            try {
+                const foundedHotel = await mongoDB.collection('hotels').findOne({ code });
+                if (foundedHotel) {
+                    console.log(code);
+                    let detailsHotel = await generateDetailsHotelByCode(foundedHotel)
+                    await mongoDB.collection("details").insertOne(detailsHotel);
                 }
+            } catch (error) {
+                console.log('runner in generate details: ', error);
             }
-
 
         }
     }
 
+}
+
+async function generateDetailsHotelByCode(foundedHotel) {
+    try {
+        let joinedHotelBoards = await joinBoards(foundedHotel)
+        let joinedHotelAccommodationType = await joinAccommodationType(joinedHotelBoards)
+        let joinedHotelCategory = await joinCategory(joinedHotelAccommodationType)
+        let joinedHotelCategoryGroup = await joinCategoryGroup(joinedHotelCategory)
+        let joinedHotelChain = await joinChain(joinedHotelCategoryGroup)
+        let joinedHotelCountry = await joinCountry(joinedHotelChain)
+        let joinedHotelDestination = await joinDestination(joinedHotelCountry)
+        let joinedHotelFacilities = await joinfacilities(joinedHotelDestination)
+        let joinedHotelImages = await joinImages(joinedHotelFacilities)
+        let joinedHotelRooms = await joinRooms(joinedHotelImages)
+        let joinedHotelSegments = await joinSegments(joinedHotelRooms)
+        let joinedHotelTerminals = await joinTerminals(joinedHotelSegments)
+        delete joinedHotelTerminals._id
+        return joinedHotelTerminals
+        // let json = JSON.stringify(joinedHotelTerminals);
+        // fs.appendFileSync('myjsonfile.txt', `${code.toString()}\n`, 'utf8');
+    } catch (error) {
+        console.log(error.message)
+    }
 }
 
 async function joinBoards(hotel) {
@@ -54,7 +62,7 @@ async function joinBoards(hotel) {
                     return {
                         code: match.code,
                         description: {
-                            content: match.description.content
+                            content: match?.description?.content ? match?.description?.content : ''
                         }
                     };
                 }
@@ -152,7 +160,7 @@ async function joinCountry(hotel) {
             delete hotel.countryCode;
             hotel['country'] = {
                 code: result.code,
-                description: result.description,
+                description: result?.description ? result.description : '',
                 isoCode: result.isoCode
             }
             if (hotel.stateCode) {
@@ -241,7 +249,7 @@ async function joinImages(hotel) {
                         type: {
                             code: imageType,
                             description: {
-                                content: match.description.content
+                                content: match?.description?.content ? match?.description?.content : ''
                             },
                         },
                         ...image
@@ -266,37 +274,45 @@ async function joinRooms(hotel) {
             let result = [];
             for (const room of hotel.rooms) {
                 let foundedRoomInfo = await mongoDB.collection('rooms').findOne({ code: room.roomCode, characteristic: room.characteristicCode }, { projection: { _id: 0 } })
-                let roomFacilities = room.roomFacilities
-                let roomStays = room.roomStays
-                let roomType = room.roomType
-                let characteristicCode = room.characteristicCode
-                delete room.roomFacilities
-                delete room.roomFacilities
-                delete room.roomStays
-                delete room.characteristicCode
-                delete room.roomType
-                let roomObject = {
-                    characteristic: {
-                        code: characteristicCode,
-                        description: { content: foundedRoomInfo.characteristicDescription.content }
+                if (foundedRoomInfo) {
+                    let roomFacilities = room.roomFacilities
+                    let roomStays = room.roomStays
+                    let roomType = room.roomType
+                    let characteristicCode = room.characteristicCode
+                    delete room.roomFacilities
+                    delete room.roomFacilities
+                    delete room.roomStays
+                    delete room.characteristicCode
+                    delete room.roomType
+                    let roomObject = {
+                        characteristic: {
+                            code: characteristicCode,
+                            description: {
+                                content: foundedRoomInfo?.characteristicDescription?.content ? foundedRoomInfo?.characteristicDescription?.content : ''
+                            }
 
-                    },
-                    description: foundedRoomInfo.description,
-                    ...room,
-                    type: {
-                        code: foundedRoomInfo.type,
-                        description: {
-                            content: foundedRoomInfo.typeDescription.content
+                        },
+                        description: foundedRoomInfo?.description ? foundedRoomInfo?.description : '',
+                        ...room,
+                        type: {
+                            code: foundedRoomInfo.type,
+                            description: {
+                                content: foundedRoomInfo?.typeDescription?.content ? foundedRoomInfo?.typeDescription?.content : ''
+                            }
                         }
                     }
+                    if (roomFacilities) {
+                        roomObject['roomFacilities'] = updateRoomFacilities(roomFacilities, facilities)
+                    }
+                    if (roomStays) {
+                        roomObject['roomStays'] = updateRoomStay(roomStays, facilities)
+                    }
+                    result.push(roomObject)
                 }
-                if (roomFacilities) {
-                    roomObject['roomFacilities'] = updateRoomFacilities(roomFacilities, facilities)
+                else {
+                    console.error('room info not found: ', { code: room.roomCode, characteristic: room.characteristicCode });
                 }
-                if (roomStays) {
-                    roomObject['roomStays'] = updateRoomStay(roomStays, facilities)
-                }
-                result.push(roomObject)
+
             }
 
             result = result.filter(item => item);
@@ -319,7 +335,7 @@ function updateRoomFacilities(roomFacilities, facilities) {
                 if (match) {
                     return {
                         description: {
-                            content: match.description.content
+                            content: match?.description?.content ? match?.description?.content : ''
                         },
                         ...facility
                     };
@@ -365,7 +381,7 @@ async function joinSegments(hotel) {
                     return {
                         code: match.code,
                         description: {
-                            content: match.description.content
+                            content: match?.description?.content ? match?.description?.content : ''
                         }
                     };
                 }
@@ -396,10 +412,10 @@ async function joinTerminals(hotel) {
                         terminalCode: match.code,
                         distance: terminal.distance,
                         description: {
-                            content: match.description.content
+                            content: match?.description?.content ? match.description.content : ''
                         },
                         name: {
-                            content: match.name.content
+                            content: match?.name?.content ? match?.name?.content : ''
                         },
                         terminalType: match.type
                     };
@@ -425,5 +441,6 @@ async function generateHotelDetails() {
 
 // generateHotelDetails()
 module.exports = {
-    generateHotelDetails
+    generateHotelDetails,
+    generateDetailsHotelByCode
 }

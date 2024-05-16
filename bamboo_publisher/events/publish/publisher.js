@@ -27,7 +27,6 @@ async function publishHotelInfo(data) {
   } catch (error) {
     console.log("----------------publish Hotel Info error:", error)
   }
-
 }
 
 async function publishDailyHotelInfo(data) {

@@ -1,21 +1,22 @@
+const moment = require('moment-timezone');
 const Initializer = require('../config/initialize');
 const { LIMIT_RANGE_REQUEST } = require('../config/static-variables');
 const typesContentInfo = require('../config/types.json');
 const { generateRange } = require('../utils/generate-range');
 const { getHotelsContentTypesByRequest } = require('../requests/hotels-content-types-request');
 
-async function getTypesHotelsInfoService(from = 1, to = LIMIT_RANGE_REQUEST) {
+async function getTypesHotelsInfoService({from = 1, to = LIMIT_RANGE_REQUEST, lastUpdateTime}) {
     try {
         for (let typeContent of typesContentInfo) {
             if(typeContent.isScrap==true){
                 console.log('started:', typeContent);
-                const { total } = await sendRequest({ ...typeContent, from, to })
+                const { total } = await sendRequest({ ...typeContent, from, to, lastUpdateTime })
                 if(total> to){
                     let skip = typeContent.skip ? typeContent.skip : 1
                     const range = generateRange(total, LIMIT_RANGE_REQUEST, skip )
                     for (let currentRange of range) {
                         console.log(`Range for ${typeContent.type}: ${currentRange.from} - ${currentRange.to}`)
-                        await sendRequest({ ...typeContent, ...currentRange })
+                        await sendRequest({ ...typeContent, ...currentRange, lastUpdateTime })
                     }
                 }
             }
@@ -27,8 +28,8 @@ async function getTypesHotelsInfoService(from = 1, to = LIMIT_RANGE_REQUEST) {
 }
 
 
-async function sendRequest({ url, type, from, to }) {
-    const { total, data, error, isValid } = await getHotelsContentTypesByRequest({ url, type, from, to })
+async function sendRequest({ url, type, from, to, lastUpdateTime }) {
+    const { total, data, error, isValid } = await getHotelsContentTypesByRequest({ url, type, from, to, lastUpdateTime })
     if (error) {
         if (error == 'API KEY is incorrect' || error?.response?.status == 403) {
             console.log('Error:', type)
@@ -36,7 +37,7 @@ async function sendRequest({ url, type, from, to }) {
         }
         console.log('Error:', type)
         console.log('retry to gathering data...!')
-        await sendRequest({ url, type, from, to })
+        await sendRequest({ url, type, from, to, lastUpdateTime })
         return;
     }
     if (isValid)
@@ -44,10 +45,11 @@ async function sendRequest({ url, type, from, to }) {
     return { total }
 }
 
-async function runnerContentType() {
+async function runnerContentType(lastUpdateTime) {
     try {
         await Initializer.run()
-        await getTypesHotelsInfoService()
+        lastUpdateTime = lastUpdateTime ? lastUpdateTime : moment().format('YYYY-MM-DD')
+        await getTypesHotelsInfoService({from: 1, to: LIMIT_RANGE_REQUEST, lastUpdateTime })
     } catch (error) {
         console.error(error.message)
     }

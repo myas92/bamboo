@@ -5,11 +5,18 @@ const { refresherApiKey } = require('../utils/refresher-api-key');
 const { MAX_USAGE_API_KEY_TYPES } = require('../config/static-variables');
 
 
-const getHotelsContentTypesByRequest = async ({ url, type, from, to }) => {
+const getHotelsContentTypesByRequest = async ({ url, type, from, to, lastUpdateTime }) => {
   try {
     const { token, secret } = await refresherApiKey(MAX_USAGE_API_KEY_TYPES)
     if (!token) {
       return { data: null, error: 'API KEY is invalid', }
+    }
+    let params ={
+      from: from,
+      to: to
+    }
+    if(lastUpdateTime){
+      params['lastUpdateTime']=lastUpdateTime
     }
     const config = {
       method: 'get',
@@ -21,10 +28,7 @@ const getHotelsContentTypesByRequest = async ({ url, type, from, to }) => {
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip'
       },
-      params: {
-        from: from,
-        to: to
-      },
+      params: params,
       timeout: process.env.API_TEIMEOUT
     };
 
