@@ -4,15 +4,15 @@ const moment = require('moment-timezone');
 const { runnerContentType } = require('./services/archiveTypes');
 // Every days at 10:00:00 AM
 const cronConfigDaily = {
-    pattern: '0 0 10 * * *',
+    pattern: '0 */3 * * * *',
     subtract: 1,
-    type: 'days',
+    type: 'hours',
     format: 'YYYY-MM-DDTHH:mm:ss.SSS'
 }
 
 // Every days at 10:00:00 AM
 const cronConfigTypes = {
-    pattern: '0 0 10 * * *',
+    pattern: '0 0 9 * * *',
     subtract: 1,
     type: 'days',
     format: 'YYYY-MM-DDTHH:mm:ss.SSS'
@@ -28,11 +28,19 @@ const cronConfigTypes = {
 
 // Every TEST
 // const cronConfigDaily = {
-//     pattern: '0 40 13 * * *',
+//     pattern: '0 14 13 * * *',
 //     subtract: 6,
 //     type: 'hours',
-//     format: 'YYYY-MM-DDTHH:mm:ss.SSS'
+//     format: 'YYYY-MM-DD'
 // }
+
+// const cronConfigTypes = {
+//     pattern: '0 32 12 * * *',
+//     subtract: 20,
+//     type: 'days',
+//     format: 'YYYY-MM-DD'
+// }
+
 
 new CronJob(
     cronConfigDaily.pattern,

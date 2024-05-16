@@ -9,9 +9,9 @@ class DailyHotelListener extends Listener {
     }
     async onMessage(data, msg, channel) {
         const mongoDB = Initializer.mon
-        try {
 
             try {
+                let currentItem;
                 const { hotels } = data
                 const updateManyOperation = hotels.map(hotel => ({
                     updateOne: {
@@ -26,59 +26,23 @@ class DailyHotelListener extends Listener {
                 // upsert hotel details
                 for (const [index, hotel] of hotels.entries()) {
                     try {
-                        console.log(index);
-                        if(index > 52){
+                        currentItem=hotel
                             let detailsHotel = await generateDetailsHotelByCode(hotel)
                             await mongoDB.collection("details").updateOne({
                                 code: detailsHotel.code
                             }, {
                                 $set: detailsHotel
                             }, { upsert: true });
-                        }
-
                     } catch (error) {
                         console.log(error);
                     }
                 }
-                // const result = await mongoDB.collection("hotels").insertMany(hotels);
-                channel.ack(msg)
-                // Commit the transaction if all operations succeed
-                res.status(200).send('Bulk write operations committed successfully.');
+                 channel.ack(msg)
             } catch (error) {
-                // Abort the transaction if any operation fails
-                await session.abortTransaction();
-                res.status(500).send('Bulk write operations failed. Transaction aborted.');
+                console.log(error);
+                 fs.appendFileSync('error.txt', `${code.toString()}\n`, 'utf8');
+                 fs.appendFileSync('hotelsError.txt', `${currentItem.toString()}\n`, 'utf8');
             }
-
-
-
-
-
-
-
-
-
-
-
-
-            const { hotels } = data
-            const updateManyOperation = hotels.map(hotel => ({
-                updateOne: {
-                    filter: { code: hotel.code },
-                    update: { $set: { ...hotel } },
-                    upsert: true
-                }
-            }));
-
-            let result = await mongoDB.collection("hotels").bulkWrite(updateManyOperation, { ordered: false })
-            // const result = await mongoDB.collection("hotels").insertMany(hotels);
-            console.log(`Inserted ${data.from} - ${data.to} | modified count: ${result?.modifiedCount} `)
-            channel.ack(msg)
-        } catch (error) {
-            console.log("hotelListener", error)
-
-        }
-
     }
 }
 

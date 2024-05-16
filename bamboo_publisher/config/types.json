@@ -2,78 +2,78 @@
     {
         "url": "/hotel-content-api/1.0/locations/countries?fields=all&language=ENG",
         "type": "countries",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/locations/destinations?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "destinations",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/facilities?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "facilities",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/ratecomments?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "rateComments",
-        "isScrap": false,
+        "isScrap": true,
         "skip": 0
     },
     {
         "url": "/hotel-content-api/1.0/types/accommodations?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "accommodations",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/issues?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "issues",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/boards?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "boards",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/categories?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "categories",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/chains?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "chains",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/currencies?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "currencies",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/facilities?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "facilities",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/facilitygroups?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "facilityGroups",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/facilitytypologies?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "facilityTypologies",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/languages?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "languages",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/promotions?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "promotions",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/rooms?fields=all&language=ENG&useSecondaryLanguage=false",
@@ -83,21 +83,21 @@
     {
         "url": "/hotel-content-api/1.0/types/segments?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "segments",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/terminals?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "terminals",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/imagetypes?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "imageTypes",
-        "isScrap": false
+        "isScrap": true
     },
     {
         "url": "/hotel-content-api/1.0/types/groupcategories?fields=all&language=ENG&useSecondaryLanguage=false",
         "type": "groupCategories",
-        "isScrap": false
+        "isScrap": true
     }
 ]
