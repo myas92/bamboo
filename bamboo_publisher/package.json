@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "step1": "node -e 'require(\"./listenner-to-rabbitmq.js\").runner()'",
+    "step2": "node -e 'require(\"./services/archiveHotelsInfo\").runnerArhcive()'",
+    "step3": "node -e 'require(\"./services/archiveTypes\").runnerContentType()'",
+    "step4": "node -e 'require(\"./services/generateHotelDetails\").generateHotelDetails()'"
+  },
   "dependencies": {
     "amqplib": "^0.10.4",
     "axios": "^1.6.8",

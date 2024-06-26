@@ -3,29 +3,40 @@ const Initializer = require('../config/initialize');
 
 async function runner() {
     const mongoDB = Initializer.mon;
-    let codes = []
+    let codes = [];
+
     try {
-        codes = await mongoDB.collection('hotels').find({}, { projection: { _id: 0, code: 1, } }).toArray()
+        codes = await mongoDB.collection('hotels').find({}, { projection: { _id: 0, code: 1 } }).toArray();
     } catch (error) {
         console.log(error);
+        return;
     }
-    for (let { code } of codes) {
-        if (code > 0) {
+
+    const validCodes = codes.filter(({ code }) => code > 0);
+    const chunkSize = 10;
+    const codeChunks = [];
+
+    // Split the array of codes into chunks of 10 codes each
+    for (let i = 0; i < validCodes.length; i += chunkSize) {
+        codeChunks.push(validCodes.slice(i, i + chunkSize));
+    }
+    
+    // Process each chunk of codes in parallel using Promise.all
+    for (let chunk of codeChunks) {
+        await Promise.all(chunk.map(async ({ code }) => {
             try {
                 const foundedHotel = await mongoDB.collection('hotels').findOne({ code });
                 if (foundedHotel) {
                     console.log(code);
-                    let detailsHotel = await generateDetailsHotelByCode(foundedHotel)
+                    let detailsHotel = await generateDetailsHotelByCode(foundedHotel);
                     await mongoDB.collection("details").insertOne(detailsHotel);
                 }
             } catch (error) {
-                console.log(object);
-                console.log('runner in generate details: ', error);
+                console.error('Error processing code:', code);
+                fs.appendFileSync('hotel_erors.txt', `${code.toString()} : ${error.message}\n`, 'utf8');
             }
-
-        }
+        }));
     }
-
 }
 
 async function generateDetailsHotelByCode(foundedHotel) {
