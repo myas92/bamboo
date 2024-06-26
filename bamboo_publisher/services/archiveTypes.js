@@ -48,7 +48,6 @@ async function sendRequest({ url, type, from, to, lastUpdateTime }) {
 async function runnerContentType(lastUpdateTime) {
     try {
         await Initializer.run()
-        lastUpdateTime = lastUpdateTime ? lastUpdateTime : moment().format('YYYY-MM-DD')
         await getTypesHotelsInfoService({from: 1, to: LIMIT_RANGE_REQUEST, lastUpdateTime })
     } catch (error) {
         console.error(error.message)

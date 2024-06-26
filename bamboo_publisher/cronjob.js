@@ -4,7 +4,7 @@ const moment = require('moment-timezone');
 const { runnerContentType } = require('./services/archiveTypes');
 // Every days at 10:00:00 AM
 const cronConfigDaily = {
-    pattern: '0 */3 * * * *',
+    pattern: '0 0 */1 * * *',
     subtract: 1,
     type: 'hours',
     format: 'YYYY-MM-DDTHH:mm:ss.SSS'

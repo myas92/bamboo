@@ -19,6 +19,7 @@ async function runner() {
                     await mongoDB.collection("details").insertOne(detailsHotel);
                 }
             } catch (error) {
+                console.log(object);
                 console.log('runner in generate details: ', error);
             }
 
