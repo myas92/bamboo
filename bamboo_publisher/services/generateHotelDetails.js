@@ -33,7 +33,7 @@ async function runner() {
                 }
             } catch (error) {
                 console.error('Error processing code:', code);
-                fs.appendFileSync('hotel_erors.txt', `${code.toString()} : ${error.message}\n`, 'utf8');
+                fs.appendFileSync('hotel_errors.txt', `${code.toString()} : ${error}\n`, 'utf8');
             }
         }));
     }

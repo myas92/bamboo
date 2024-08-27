@@ -2,10 +2,11 @@ const rabbitWrapper = require('../config/rabbit-wrapper')
 const Initializer = require('../config/initialize')
 const moment = require('moment-timezone');
 const { generateRange } = require('../utils/generate-range');
-const {  publishDailyHotelInfo } = require("../events/publish/publisher");
+const { publishDailyHotelInfo } = require("../events/publish/publisher");
 const { LIMIT_RANGE_REQUEST } = require('../config/static-variables');
 const { getDailyHotelsContentByRequest } = require('../requests/hotels-daily-content-request');
 const { getTotalRemainderUsageApiKey } = require('../utils/refresher-api-key');
+const { runnerContentType } = require('./archiveTypes');
 
 async function checkStatusService(lastUpdateTime) {
     let totalRemainderUsage = await getTotalRemainderUsageApiKey()
@@ -68,7 +69,7 @@ async function runnerDaily(lastUpdateTime) {
                 await getHotelsInfoService({ total, lastUpdateTime })
             }
         }
-        else{
+        else {
             console.log('something went wrong...!');
         }
         console.log('Daily hotels information is completed successfully')
@@ -78,6 +79,21 @@ async function runnerDaily(lastUpdateTime) {
 }
 
 
+async function getDailyData(subtract=1) {
+    await runnerContentType()
+    const cronConfigDaily = {
+        subtract: subtract,
+        type: 'days',
+        format: 'YYYY-MM-DDTHH:mm:ss.SSS'
+    }
+    const now = moment();
+    const newTime = now.subtract(cronConfigDaily.subtract, cronConfigDaily.type);
+    let lastUpdateTime = newTime.format(cronConfigDaily.format)
+    await runnerDaily(lastUpdateTime)
+
+}
+
 module.exports = {
-    runnerDaily
+    runnerDaily,
+    getDailyData
 }
